@@ -22,8 +22,8 @@
 
     if (isset($_POST['emp'])) {
         $servername = "localhost";
-        $username = "root";
-        $password = "mysql";
+        $username = "app_user";
+        $password = "app";
         $db_name = "ProjectManagerDB";
     }
 

@@ -8,7 +8,7 @@ require('seedData.php');
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $clear = "TRUNCATE TABLE projectmanagerdb.employees_projects;
+    $clear = "DELETE FROM projectmanagerdb.employees_projects;
                 DELETE FROM projectmanagerdb.employees;
               DELETE FROM projectmanagerdb.projects;
               ";

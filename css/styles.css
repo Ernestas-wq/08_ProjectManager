@@ -1,3 +1,82 @@
+:root {
+	--bg_main: #f0efeb;
+	--soft_blue: #457b9d;
+	--text_light: #f1faee;
+	--text_dark: #3d405b;
+}
+* {
+	box-sizing: border-box;
+}
+a {
+	text-decoration: none;
+}
+button {
+	cursor: pointer;
+	background-color: var(--bg_main);
+}
+
+.hidden {
+	display: none;
+}
+
+.login {
+	width: 50%;
+}
+.input-container {
+	margin-top: 30px;
+	font-size: 16px;
+	width: 100%;
+	position: relative;
+	height: 70px;
+	overflow: hidden;
+}
+.input-container input {
+	width: 100%;
+	height: 100%;
+	color: var(--text_dark);
+	border: none;
+	outline: none;
+	padding-top: 20px;
+	background: transparent;
+}
+.input-container label {
+	position: absolute;
+	color: var(--text_dark);
+	bottom: 0px;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	border-bottom: 1px solid var(--text_dark);
+}
+.input-container label::after {
+	content: "";
+	position: absolute;
+	left: 0px;
+	bottom: -1px;
+	height: 100%;
+	width: 100%;
+	border-bottom: 4px solid var(--soft_blue);
+	transform: translateX(-105%);
+	transition: all 0.6s ease;
+}
+.content-name {
+	position: absolute;
+	bottom: 5px;
+	left: 0px;
+	transition: all 0.6s ease;
+}
+.input-container input:focus + .label-name .content-name,
+.input-container input:valid + .label-name .content-name {
+	transform: translateY(-150%);
+	font-size: 14px;
+	color: var(--soft_blue);
+}
+.input-container input:focus + .label-name::after,
+.input-container input:valid + .label-name::after {
+	transform: translateX(0%);
+}
+
 button {
 	min-width: 150px;
 }

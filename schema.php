@@ -20,8 +20,9 @@ utf8mb4_lithuanian_ci DEFAULT ENCRYPTION='N'";
 $conn = null;
 
 ?>
-<!-- Creating Tables -->
+
 <?php
+// Create tables
 $db_name = "ProjectManagerDB";
 
 try {
@@ -42,7 +43,8 @@ CREATE TABLE IF NOT EXISTS Employees_Projects(
     employee_id INT UNSIGNED,
     project_id INT UNSIGNED,
     FOREIGN KEY (employee_id) REFERENCES Employees(id),
-    FOREIGN KEY (project_id) REFERENCES Projects(id)
+    FOREIGN KEY (project_id) REFERENCES Projects(id),
+    UNIQUE (employee_id, project_id)
     ) ENGINE=INNODB;";
     $conn->exec($SQL_TABLES);
     echo "Tables created successfully";

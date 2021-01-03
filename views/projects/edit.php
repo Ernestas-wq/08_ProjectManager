@@ -2,6 +2,7 @@
 require('../../partials/head.php');
 require('../../partials/navbar.php');
 
+if($_SERVER['REQUEST_METHOD'] === "POST") {
 echo '<h1 class="text-center">Update Project</h1>
 <div class="row">
     <div class="col-6 offset-3">
@@ -23,7 +24,8 @@ echo '<h1 class="text-center">Update Project</h1>
         </form>
     </div>
 </div>';
-
+}
+else echo '<h2 class="display-3 text-center text-danger">Sorry something went wrong </h2> ';
 
 
 require('../../partials/footer.php');

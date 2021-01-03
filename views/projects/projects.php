@@ -17,12 +17,14 @@
     require('../../CRUD/create.php');
     require('../../CRUD/update.php');
     require('../../CRUD/delete.php');
+    require('../../CRUD/assign.php');
+
     require('delete.php');
 
     if(isset($_POST['proj'])){
     $servername = "localhost";
-    $username = "root";
-    $password = "mysql";
+    $username = "app_user";
+    $password = "app";
     $db_name = "ProjectManagerDB";
     }
     $projects = [];
@@ -32,7 +34,7 @@
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
            # Delete modal to confirm
-           if($_POST['delete']) displayDeleteModal($_POST['project_name'], $_POST['delete']);
+        if($_POST['delete']) displayDeleteModal($_POST['project_name'], $_POST['delete']);
            # If confirmed deleting from DB
         if($delete_proj) {
             $conn->exec($delete_proj);
@@ -46,6 +48,20 @@
             $conn->exec($update_proj);
             echo '<h4 class="text-center mt-3 display-4">Proejct updated successfully </h4>';
         }
+        # Assign employee to a project
+        if($assign_emp) {
+            $stmt = $conn->prepare($assign_emp);
+            $res = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+            foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
+                $emp_to_assign = $v['emp_id'];
+            }
+            $assign_sql = "INSERT INTO employees_projects
+            (employee_id, project_id)
+            VALUES ($emp_to_assign, $proj_id)";
+            $conn->exec($assign_sql);
+        }
+
 
         $stmt = $conn->prepare(
         "SELECT projects.id, project_name, firstname, lastname
@@ -79,7 +95,7 @@
     $conn = null;
     if(count($projects) > 0) {
     echo '<div class="container mt-5 mb-5">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
     <thead class="thead-dark">
     <tr>
         <th scope="col">Project ID</th>
@@ -87,6 +103,7 @@
         <th scope="col">Employees</th>
         <th scope="col">Update</th>
         <th scope="col">Delete</th>
+        <th scope="col">Assignment</th>
         </tr>
         </thead>
         <tbody>';
@@ -108,7 +125,14 @@
         <input type="hidden" name="delete" value="'.$k.'">
         <button type="submmit" class="btn btn-danger">Delete </button>
         </form></td>
+        <td><form method="POST" action="assign.php">
+        <input type="hidden" name="assign" value="y">
+        <input type="hidden" name="project_name" value="'. $projects[$k]->get_project_name() .'">
+        <input type="hidden" name="id" value = '. $k .'>
+        <button type="submit" class="btn btn-warning">Assign Employee</button>
 
+        </form>
+        </td>
 
         </tr>';
     }
