@@ -15,6 +15,9 @@
     require('../../partials/navbar.php');
     require('../../Classes/Project.php');
     require('../../CRUD/create.php');
+    require('../../CRUD/update.php');
+    require('../../CRUD/delete.php');
+    require('delete.php');
 
     if(isset($_POST['proj'])){
     $servername = "localhost";
@@ -28,10 +31,20 @@
         $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+           # Delete modal to confirm
+           if($_POST['delete']) displayDeleteModal($_POST['project_name'], $_POST['delete']);
+           # If confirmed deleting from DB
+        if($delete_proj) {
+            $conn->exec($delete_proj);
+            echo '<h4 class="text-center mt-3 display-4">Proejct deleted successfully </h4>';
+        }
         if($create_proj) {
             $conn->exec($create_proj);
             echo '<h4 class="text-center mt-3 display-4">Proejct added successfully </h4>';
-
+        }
+        if($update_proj) {
+            $conn->exec($update_proj);
+            echo '<h4 class="text-center mt-3 display-4">Proejct updated successfully </h4>';
         }
 
         $stmt = $conn->prepare(
@@ -72,6 +85,8 @@
         <th scope="col">Project ID</th>
         <th scope=col">Project Name</th>
         <th scope="col">Employees</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
         </tr>
         </thead>
         <tbody>';
@@ -81,6 +96,20 @@
         <th scope="row"> ' . $k . ' </th>
         <td> ' . $projects[$k]->get_project_name() . '</td>
         <td> ' . $projects[$k]->get_employees() . '</td>
+        <td><form method="POST" action="edit.php">
+        <input type="hidden" name="edit" value="y">
+        <input type="hidden" name="project_name" value="'. $projects[$k]->get_project_name() .'">
+        <input type="hidden" name="id" value = '. $k .'>
+        <button type="submit" class="btn btn-success">Update</button>
+        </form></td>
+        <td><form method="POST" action="projects.php">
+        <input type="hidden" name="proj" value="y">
+        <input type="hidden" name="project_name" value="'.$projects[$k]->get_project_name().'">
+        <input type="hidden" name="delete" value="'.$k.'">
+        <button type="submmit" class="btn btn-danger">Delete </button>
+        </form></td>
+
+
         </tr>';
     }
     echo '</tbody>
@@ -98,6 +127,8 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="../../js/utils.js"></script>
+
 </body>
 
 </html>
