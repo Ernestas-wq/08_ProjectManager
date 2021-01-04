@@ -68,7 +68,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
         </form>';
     }
     else {
-    echo '<form class="login mt-3" action="index.php" method="POST">
+    echo '<h3 class="text-danger display-6 mt-4 text-center" id="passwordValidationMessage"></h3>
+    <form class="login mt-3 validated-form" action="index.php" id="login" method="POST">
         <input type="hidden" name="login" value="y">
         <div class="input-container">
             <input type="text" id="username" name="username" autocomplete="off" required>
@@ -82,7 +83,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
                 <span class="content-name">Enter your password </span>
             </label>
         </div>
-        <button type="Submit" class="btn btn-dark" id="login">Login</button>
+        <button type="Submit" class="btn btn-dark">Login</button>
     </form>
 </div>';
     }
@@ -94,6 +95,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <script src="js/validate.js"></script>
+    <script src="js/login.js"></script>
 </body>
 
 </html>

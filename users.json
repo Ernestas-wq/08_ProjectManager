@@ -1,6 +1,7 @@
 {
 	"ern": {
 		"password": "zefyras",
+		"app_user": true,
 		"admin": true
 	},
 	"test1": {
