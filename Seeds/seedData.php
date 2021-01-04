@@ -13,5 +13,7 @@ $seedsLastNames = [
 ];
 $seedsProjects = [
     'Project X', 'PHP Project', 'Bussiness Page', 'Greenscreen', 'Weather App',
-    'Mario Game', 'Google Maps', 'Data analysis FF15', 'Random Project 15', 'Random Project 22'
+    'Mario Game', 'Google Maps', 'Data analysis FF15', 'Random Project 15', 'Random Project 22',
+    'Java Course', 'Windows xx10', 'Sound Check', 'Random Project 11', 'News Flash', 'Reddit',
+    'Layout V12'
 ];

@@ -32,6 +32,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     <?php
     require('../../partials/head.php');
     require('../../partials/navbar.php');
+    require('../../partials/search.php');
     require('../../Classes/Employee.php');
     require('../../Classes/Helper.php');
     require('../../CRUD/create.php');
@@ -41,10 +42,11 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('delete.php');
     echo '<h1 class="text-center mt-3 display-3 text-secondary">All Employees</h1>';
 
+    display_search_UI_emps();
+
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         # Delete modal to confirm
         if($_POST['delete']) displayDeleteModal($_POST['fullname'], $_POST['delete']);
         # If confirmed deleting from DB
@@ -68,27 +70,22 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
             $max = Helper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "employees");
             // Getting overall max id to know when not to display "next" button
             $max_overall_id = Helper::get_max_overall_id($conn, "employees");
-
-
-
-        //
-        $stmt = $conn->prepare(
-            "SELECT employees.id, firstname, lastname, project_name
-            FROM employees
-            LEFT JOIN employees_projects
-            ON employees.id = employees_projects.employee_id
-            LEFT JOIN projects
-            ON projects.id = employees_projects.project_id
-            WHERE employees.id BETWEEN $min AND $max
-            ORDER BY employees.id;"
-        );
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
+            // Displaying accordingly if search by id
+            if($_POST['search_by_id']) {
+                $emp_id = $_POST['search_by_id'];
+                $stmt = Helper::show_emp_by_id($conn, $emp_id);
+            }
+            // Displaying accordingly if search by lastname
+            else if($_POST['search_by_lastname']) {
+                $lastname = $_POST['search_by_lastname'];
+                $stmt = Helper::show_emp_by_lastname($conn, $lastname);
+            }
+            // Show first page by default
+            else {
+            $stmt = Helper::show_all_emps($conn, $min, $max);
+            }
         $employees = [];
-
         foreach (new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
-
-
             // Grouping projects to an employee for display purposes
             if (array_key_exists($v['id'], $employees) && $v['project_name']) {
                 $employees[$v['id']]->populate_projects($v['project_name']);
@@ -146,7 +143,8 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     echo '</tbody>
     </table>
     </div>';
-    if($OFFSET === 0&& $max !== $max_overall_id) {
+    if($OFFSET === 0&& $max !== $max_overall_id
+    && !$_POST['search_by_id'] && !$_POST['search_by_lastname']) {
     echo '<div class="container mb-3 d-flex justify-content-between">
      <div></div>
     <form method="POST" action="show.php">
@@ -155,7 +153,8 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     <button class="btn btn-dark">Next</button>
     </form></div>';
     }
-    else if($OFFSET > 0 && $max < $max_overall_id) {
+    else if($OFFSET > 0 && $max < $max_overall_id
+    && !$_POST['search_by_id'] && !$_POST['search_by_lastname']) {
         echo '<div class="container mb-3 d-flex justify-content-between">
         <form method="POST" action="show.php">
     <input type="hidden" name="show" value="y">
@@ -170,7 +169,8 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     </div>
         ';
     }
-    else if($OFFSET !== 0 && $max === $max_overall_id){
+    else if($OFFSET !== 0 && $max === $max_overall_id
+    && !$_POST['search_by_id'] && !$_POST['search_by_lastname']){
         echo '<div class="container mb-3 d-flex justify-content-between">
         <form method="POST" action="show.php">
         <input type="hidden" name="show" value="y">

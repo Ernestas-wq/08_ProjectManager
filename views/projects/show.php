@@ -15,8 +15,6 @@ session_start();
       $_SESSION['projects_offset'] -= $RESULTS_TO_LOAD;
     }
 
-
-
 if(isset($_POST['show']) && $_SESSION['logged_in']) {
     $servername = "localhost";
     $db_name = "ProjectManagerDB";
@@ -40,7 +38,6 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('../../CRUD/update.php');
     require('../../CRUD/delete.php');
     require('../../CRUD/assign.php');
-
     require('delete.php');
 
 
@@ -83,19 +80,8 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         $max = Helper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
         $max_overall_id = Helper::get_max_overall_id($conn, "projects");
 
-        $stmt = $conn->prepare(
-        "SELECT projects.id, project_name, firstname, lastname
-        FROM projects
-        LEFT JOIN employees_projects
-        ON projects.id=employees_projects.project_id
-        LEFT JOIN employees
-        ON employees.id=employees_projects.employee_id
-        WHERE projects.id BETWEEN $min AND $max
-        ORDER BY projects.id;");
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt -> execute();
-
-
+        // Showing all by default
+        $stmt = Helper::show_all_projs($conn, $min, $max);
         $projects = [];
 
         foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v){
