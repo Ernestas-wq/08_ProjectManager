@@ -20,6 +20,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
             $_SESSION['timeout'] = time();
             $_SESSION['username'] = $user;
             $_SESSION['app_user'] = $v['app_user'];
+            $_SESSION['employees_offset'] = 0;
+            $_SESSION['projects_offset'] = 0;
         }
         }
 
@@ -50,6 +52,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
         unset($_SESSION['password']);
         unset($_SESSION['logged_in']);
         unset($_SESSION['app_user']);
+        unset($_SESSION['employees_offset']);
+
     }
 
     ?>
@@ -61,7 +65,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
         Welcome, '.$_SESSION['username'].', you have successfully logged in
         </h3>
         <form action="views/employees/show.php" class="mt-5" method="POST">
-            <input type="hidden" name="emp" value="y">
+            <input type="hidden" name="show" value="y">
             <button type="submit" class="btn btn-dark text-capitalize"
             style="font-size:24px">
             Get started</button>

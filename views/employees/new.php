@@ -8,7 +8,7 @@ echo '<h1 class="text-center">New Employee</h1>
 <div class="row">
     <div class="col-6 offset-3">
         <form action="show.php" method="POST" novalidate class="validated-form">
-        <input type="hidden" name="emp" value="y">
+        <input type="hidden" name="show" value="y">
         <input type="hidden" name="new" value="y">
             <div class="mb-3">
                 <label class="form-label" for="firstname">Firstname</label>

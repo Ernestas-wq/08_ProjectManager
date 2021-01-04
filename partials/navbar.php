@@ -16,14 +16,14 @@ echo '<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
 
     <li class="nav-item">
     <form action="'. $views_emp .'show.php" method="POST">
-            <input type="hidden" name="emp" value="y">
+            <input type="hidden" name="show" value="y">
             <button type="submit" class="btn nav-link">All Employees</button>
         </form>
     </li>
 
     <li class="nav-item">
     <form action="'. $views_proj.'show.php" method="POST">
-            <input type="hidden" name="proj" value="y">
+            <input type="hidden" name="show" value="y">
             <button type="submit" class="btn nav-link">All Projects</button>
         </form>
     </li>

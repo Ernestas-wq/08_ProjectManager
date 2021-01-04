@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
     <div class="row">
         <div class="col-6 offset-3">
             <form action="show.php" method="POST" novalidate class="validated-form">
-            <input type="hidden" name="proj" value="y">
+            <input type="hidden" name="show" value="y">
             <input type="hidden" name="assign" value="y">
             <input type="hidden" name="proj_id" value='.$_POST['id'].'>
                 <div class="mb-3">

@@ -1,5 +1,7 @@
+<?php declare(strict_types=1)
+?>
 <?php
-function displayDeleteModal($name, $id) {
+function displayDeleteModal(string $name, int $id) {
    echo '<div class="modal fade mt-5" tabindex="-1" style="display:block;opacity:1" id="delete_emp_modal">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -10,7 +12,7 @@ function displayDeleteModal($name, $id) {
         <div class="container d-flex flex-row justify-content-around">
         <form method="POST" action="show.php">
         <input type="hidden" name="confirm_delete" value="y">
-        <input type="hidden" name="emp" value="y">
+        <input type="hidden" name="show" value="y">
         <input type="hidden" name="emp_id" value="'. $id .'">
         <button type="submit" class="btn btn-success">Yes</button>
         </form>
