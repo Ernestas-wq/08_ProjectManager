@@ -5,10 +5,10 @@
 	},
 	"test1": {
 		"password": "123",
-		"app_user": false
+		"app_user": true
 	},
 	"test2": {
 		"password": "321",
-		"app_user": true
+		"app_user": false
 	}
 }

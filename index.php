@@ -16,11 +16,10 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
         // echo $k . ' <br>';
         // echo $k . " " . $v['password'] . " " . $v['app_user'] . "<br>";
         if($_POST['username'] === $user && $_POST['password'] === $v['password']){
-            $app_user = $v['app_user'] ? true : false;
             $_SESSION['logged_in'] = true;
             $_SESSION['timeout'] = time();
             $_SESSION['username'] = $user;
-            $_SESSION['app_user'] = $app_user;
+            $_SESSION['app_user'] = $v['app_user'];
         }
         }
 
@@ -43,7 +42,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
 
 
     <div class="container d-flex flex-column align-items-center">
-    <h1 class="text-center mt-5 display-1 text-primary">Project Manager</h1>
+    <h1 class="text-center mt-5 display-3 text-primary">Project Manager</h1>
     <?php
     if(isset($_GET['action']) and $_GET['action'] === 'logout') {
         session_start();
@@ -58,11 +57,18 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
 
 
     if($_SESSION['logged_in'] === true) {
-        echo '<a class="userUI__link" href="index.php?action=logout">Logout</a>';
-        print_r($_SESSION['app_user']);
+        echo '<h3 class="display-6 mt-4 text-secondary">
+        Welcome, '.$_SESSION['username'].', you have successfully logged in
+        </h3>
+        <form action="views/employees/show.php" class="mt-5" method="POST">
+            <input type="hidden" name="emp" value="y">
+            <button type="submit" class="btn btn-dark text-capitalize"
+            style="font-size:24px">
+            Get started</button>
+        </form>';
     }
     else {
-    echo '<form class="login" action="index.php" method="POST">
+    echo '<form class="login mt-3" action="index.php" method="POST">
         <input type="hidden" name="login" value="y">
         <div class="input-container">
             <input type="text" id="username" name="username" autocomplete="off" required>
@@ -70,7 +76,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
                 <span class="content-name">Enter your username</span>
             </label>
         </div>
-        <div class="input-container">
+        <div class="input-container mb-3">
             <input type="password" id="password" name="password" autocomplete="off" required>
             <label for="password" class="label-name">
                 <span class="content-name">Enter your password </span>

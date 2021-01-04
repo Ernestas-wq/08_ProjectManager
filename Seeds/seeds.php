@@ -1,15 +1,16 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "mysql";
+$username = "app_user";
+$password = "app";
 $db_name = "ProjectManagerDB";
 require('seedData.php');
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Clear previous data
     $clear = "DELETE FROM projectmanagerdb.employees_projects;
-                DELETE FROM projectmanagerdb.employees;
+              DELETE FROM projectmanagerdb.employees;
               DELETE FROM projectmanagerdb.projects;
               ";
     $conn->exec($clear);
@@ -41,7 +42,7 @@ try {
         array_push($combos, [$i + 1, $randEmp]);
         $conn->exec($SQL);
     }
-    print_r($combos);
+    // print_r($combos);
     // Making some more random connections
     for ($i = 0; $i < 15; $i++) {
         $randEmp = mt_rand(1, 25);
@@ -60,4 +61,3 @@ try {
     echo $SQL . "<br>"  . $e->getMessage();
 }
 $conn = null;
-// Creating tables

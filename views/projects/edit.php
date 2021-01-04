@@ -1,12 +1,14 @@
 <?php
+session_start();
 require('../../partials/head.php');
 require('../../partials/navbar.php');
 
 if($_SERVER['REQUEST_METHOD'] === "POST") {
+    if($_SESSION['logged_in']) {
 echo '<h1 class="text-center">Update Project</h1>
 <div class="row">
     <div class="col-6 offset-3">
-        <form action="projects.php" method="POST" novalidate class="validated-form">
+        <form action="show.php" method="POST" novalidate class="validated-form">
         <input type="hidden" name="proj" value="y">
         <input type="hidden" name="edit" value="y">
         <input type="hidden" name="proj_id" value='.$_POST['id'].'>
@@ -25,6 +27,9 @@ echo '<h1 class="text-center">Update Project</h1>
     </div>
 </div>';
 }
+else echo '<h2 class="display-3 text-center text-danger">Please login to edit a project</h2>';
+}
+
 else echo '<h2 class="display-3 text-center text-danger">Sorry something went wrong </h2> ';
 
 

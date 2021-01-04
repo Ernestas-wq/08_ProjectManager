@@ -1,15 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Manager</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+if(isset($_POST['emp']) && $_SESSION['logged_in']) {
+    $servername = "localhost";
+    $db_name = "ProjectManagerDB";
+    if($_SESSION['app_user']){
+        $username = "app_user";
+        $password = "app";
+    }
+    else {
+        $username = "app_viewer";
+        $password = "viewer";
+    }
+}
 
-</head>
+require('../../partials/head.php');
 
-<body>
+?>
+
+
 
     <?php
     require('../../partials/navbar.php');
@@ -18,14 +27,7 @@
     require('../../CRUD/update.php');
     require('../../CRUD/delete.php');
     require('delete.php');
-    echo '<h1 class="text-center mt-5 display-2 text-primary">All Employees</h1>';
-
-    if (isset($_POST['emp'])) {
-        $servername = "localhost";
-        $username = "app_user";
-        $password = "app";
-        $db_name = "ProjectManagerDB";
-    }
+    echo '<h1 class="text-center mt-3 display-3 text-secondary">All Employees</h1>';
 
     $employees = [];
     try {
@@ -61,10 +63,9 @@
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         foreach (new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
-            // echo $v['id'] . " "
-            //     . $v['firstname'] . " "
-            //     . $v['lastname'] . " "
-            //     . $v['project_name'] . '<br>';
+
+
+            // Grouping projects to an employee for display purposes
             if (array_key_exists($v['id'], $employees) && $v['project_name']) {
                 $employees[$v['id']]->populate_projects($v['project_name']);
             } else {
@@ -85,7 +86,7 @@
     <table class="table table-bordered table-hover">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Employee ID</th>
+        <th scope="col">ID</th>
         <th scope=col">Firstname</th>
         <th scope="col">Lastname</th>
         <th scope="col">Projects</th>
@@ -108,7 +109,7 @@
         <input type="hidden" name="id" value = '. $k .'>
         <button type="submit" class="btn btn-success">Update </button>
         </form></td>
-        <td><form method="POST" action="employees.php">
+        <td><form method="POST" action="show.php">
         <input type="hidden" name="emp" value="y">
         <input type="hidden" name="fullname" value="'.$employees[$k]->get_fullname().'">
         <input type="hidden" name="delete" value="'.$k.'">
@@ -127,10 +128,8 @@
 else {
     echo '<h2 class="display-3 text-center">Sorry, failed to retrieve data </h2>';
 }
-    ?>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <script src="../../js/utils.js"></script>
-</body>
 
-</html>
+    ?>
+    <?php
+    require('../../partials/footer.php');
+?>

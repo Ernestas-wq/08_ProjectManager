@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
+require('../../partials/head.php');
+if(isset($_POST['proj']) && $_SESSION['logged_in']) {
+    $servername = "localhost";
+    $db_name = "ProjectManagerDB";
+    if($_SESSION['app_user']){
+        $username = "app_user";
+        $password = "app";
+    }
+    else {
+        $username = "app_viewer";
+        $password = "viewer";
+    }
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Manager</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-
-</head>
-
-<body>
+?>
     <?php
     // require('.././Classes/Project.php');
     require('../../partials/navbar.php');
@@ -21,14 +26,14 @@
 
     require('delete.php');
 
-    if(isset($_POST['proj'])){
-    $servername = "localhost";
-    $username = "app_user";
-    $password = "app";
-    $db_name = "ProjectManagerDB";
-    }
+    // if(isset($_POST['proj'])){
+    // $servername = "localhost";
+    // $username = "app_user";
+    // $password = "app";
+    // $db_name = "ProjectManagerDB";
+    // }
     $projects = [];
-    echo '<h1 class="text-center mt-5 display-2 text-primary">All Projects</h1>';
+    echo '<h1 class="text-center mt-3 display-3 text-secondary">All Projects</h1>';
     try{
         $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -76,8 +81,9 @@
         $stmt -> execute();
 
         foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v){
-            // echo $v['id'] . " " . $v['project_name'] . " " . $v['firstname'] . "<br>";
             $fullname = $v['firstname'] . " " . $v['lastname'];
+
+            // Grouping employees to a project, for display purposes
             if(array_key_exists($v['id'], $projects)) {
                 $projects[$v['id']]->populate_employees($fullname);
             }
@@ -98,12 +104,12 @@
     <table class="table table-bordered table-hover">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Project ID</th>
-        <th scope=col">Project Name</th>
+        <th scope="col">ID</th>
+        <th scope=col">Name</th>
         <th scope="col">Employees</th>
         <th scope="col">Update</th>
         <th scope="col">Delete</th>
-        <th scope="col">Assignment</th>
+        <th scope="col" style="width: 170px">Assign Employee</th>
         </tr>
         </thead>
         <tbody>';
@@ -119,17 +125,17 @@
         <input type="hidden" name="id" value = '. $k .'>
         <button type="submit" class="btn btn-success">Update</button>
         </form></td>
-        <td><form method="POST" action="projects.php">
+        <td><form method="POST" action="show.php">
         <input type="hidden" name="proj" value="y">
         <input type="hidden" name="project_name" value="'.$projects[$k]->get_project_name().'">
         <input type="hidden" name="delete" value="'.$k.'">
         <button type="submmit" class="btn btn-danger">Delete </button>
         </form></td>
-        <td><form method="POST" action="assign.php">
+        <td><form class="d-flex justify-content-center" method="POST" action="assign.php">
         <input type="hidden" name="assign" value="y">
         <input type="hidden" name="project_name" value="'. $projects[$k]->get_project_name() .'">
         <input type="hidden" name="id" value = '. $k .'>
-        <button type="submit" class="btn btn-warning">Assign Employee</button>
+        <button type="submit" class="btn btn-warning">Assign</button>
 
         </form>
         </td>
@@ -144,15 +150,6 @@
         echo '<h2 class="display-3 text-center">Sorry, failed to retrieve data </h2>';
     }
 ?>
-
-
-
-
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <script src="../../js/utils.js"></script>
-
-</body>
-
-</html>
+    <?php
+    require('../../partials/footer.php');
+?>

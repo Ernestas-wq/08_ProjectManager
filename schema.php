@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Employees_Projects(
     $conn->exec($SQL_TABLES);
     echo "Tables created successfully";
 } catch (PDOException $e) {
-    echo $SQL_TABLES . "<br>" . $e->getMessage();
+    echo "Error: " . "<br>" . $e->getMessage();
 };
 $conn = null;
 

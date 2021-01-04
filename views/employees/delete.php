@@ -8,7 +8,7 @@ function displayDeleteModal($name, $id) {
         </div>
         <div class="modal-body">
         <div class="container d-flex flex-row justify-content-around">
-        <form method="POST" action="employees.php">
+        <form method="POST" action="show.php">
         <input type="hidden" name="confirm_delete" value="y">
         <input type="hidden" name="emp" value="y">
         <input type="hidden" name="emp_id" value="'. $id .'">

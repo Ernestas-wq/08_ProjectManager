@@ -76,7 +76,10 @@ button {
 .input-container input:valid + .label-name::after {
 	transform: translateX(0%);
 }
-
-button {
-	min-width: 150px;
+.userUI {
+	display: flex;
+	align-items: center;
+}
+.userUI span {
+	color: var(--soft_blue);
 }
