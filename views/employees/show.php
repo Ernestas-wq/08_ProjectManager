@@ -42,11 +42,12 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('delete.php');
     echo '<h1 class="text-center mt-3 display-3 text-secondary">All Employees</h1>';
 
-    display_search_UI_emps();
 
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        display_search_UI_emps();
+
         # Delete modal to confirm
         if($_POST['delete']) displayDeleteModal($_POST['fullname'], $_POST['delete']);
         # If confirmed deleting from DB

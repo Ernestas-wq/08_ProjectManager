@@ -3,6 +3,7 @@
 function display_search_UI_emps() {
     echo '
     <div class="container">
+    <h3 class="text-danger display-6 mt-4 text-center" id="searchUiValidationMessage"></h3>
     <form class="login mt-3 validated-form" action="show.php" id="searchByIdForm" method="POST">
     <input type="hidden" name="show" value="y">
     <div class="input-container">
