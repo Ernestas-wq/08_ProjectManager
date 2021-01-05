@@ -73,20 +73,20 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         }
 
         if(isset($_POST['edit'])) {
-            EditHelper::edit_proj($conn, $_POST['project_name'], $_POST['proj_id']);
+            EditHelper::edit_proj_name($conn, $_POST['project_name'], $_POST['proj_id']);
             echo '<h4 class="text-center mt-3 display-5">Proejct updated successfully </h4>';
         }
 
         # Assign employee to a project by fullname
         if($_POST['assign_by_fullname']) {
             $emp_id = ShowHelper::get_emp_id_by_fullname($conn, $_POST['firstname'], $_POST['lastname']);
-            ShowHelper::assign_emp_to_proj($conn, $emp_id, $_POST['proj_id']);
+            EditHelper::assign_emp_to_proj($conn, $emp_id, $_POST['proj_id']);
         }
         # Assign employee to a project by id
         if($_POST['assign_by_id']) {
             $proj_id = $_POST['proj_id'];
             $emp_id = $_POST['emp_id'];
-            ShowHelper::assign_emp_to_proj($conn, $emp_id, $proj_id);
+            EditHelper::assign_emp_to_proj($conn, $emp_id, $proj_id);
         }
 
         // Getting the neccessary parameters for next and previous
@@ -155,7 +155,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         <td><form method="POST" action="edit.php">
         <input type="hidden" name="edit" value="y">
         <input type="hidden" name="project_name" value="'. $projects[$k]->get_project_name() .'">
-        <input type="hidden" name="id" value = '. $k .'>
+        <input type="hidden" name="proj_id" value = '. $k .'>
         <button type="submit" class="btn btn-success">Update</button>
         </form></td>
         <td><form method="POST" action="show.php">

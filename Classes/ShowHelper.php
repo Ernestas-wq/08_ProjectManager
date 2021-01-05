@@ -135,13 +135,21 @@ Class ShowHelper {
          }
          return $emp_id;
     }
-    public static function assign_emp_to_proj(PDO $conn, int $emp_id, int $proj_id) :void {
-            $que = "INSERT INTO employees_projects
-            (employee_id, project_id)
-            VALUES ($emp_id, $proj_id)";
-            $conn->exec($que);
-    }
+    public static function show_all_emps_in_proj(PDO $conn, $id) {
+        $que = "SELECT employees.id, firstname, lastname
+        FROM projects
+        LEFT JOIN employees_projects
+        ON projects.id=employees_projects.project_id
+        LEFT JOIN employees
+        ON employees.id=employees_projects.employee_id
+        WHERE projects.id = $id;";
+        $stmt = $conn->prepare($que);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
 
+        return $stmt;
+
+    }
 
 }
 

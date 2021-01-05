@@ -12,6 +12,12 @@ $('.close_delete_proj_modal').on('click', function(e) {
 		.css('opacity', 0);
 });
 
+$('.closeUnassignEmpModal').on('click', function(e) {
+	$('#unassignEmpModal')
+		.css('display', 'none')
+		.css('opacity', 0);
+});
+
 $('#searchByIdForm').on('submit', function(e) {
 	if (searchById.value.length === 0) {
 		e.preventDefault();

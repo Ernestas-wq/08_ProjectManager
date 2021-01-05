@@ -3,8 +3,6 @@ session_start();
 $str = file_get_contents('users.json');
 $users = json_decode($str, true);
 
-
-
 if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_POST['username'])
 && !empty($_POST['password'])) {
     #Validating log in from users.json
@@ -20,10 +18,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
             $_SESSION['results_to_show_projs'] = 5;
         }
         }
-
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

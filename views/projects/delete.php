@@ -1,5 +1,6 @@
+<?php declare(strict_types=1);?>
 <?php
-function displayDeleteModal($name, $id) {
+function displayDeleteModal(string $name, int $id) {
     echo '<div class="modal fade mt-5" tabindex="-1" style="display:block;opacity:1" id="delete_proj_modal">
      <div class="modal-dialog">
        <div class="modal-content">
