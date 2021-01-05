@@ -34,11 +34,10 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('../../partials/navbar.php');
     require('../../partials/search.php');
     require('../../Classes/Employee.php');
-    require('../../Classes/Helper.php');
-    require('../../CRUD/create.php');
-    require('../../CRUD/update.php');
-    require('../../CRUD/delete.php');
-
+    require('../../Classes/EditHelper.php');
+    require('../../Classes/CreateHelper.php');
+    require('../../Classes/DeleteHelper.php');
+    require('../../Classes/ShowHelper.php');
     require('delete.php');
     echo '<h1 class="text-center mt-3 display-3 text-secondary">All Employees</h1>';
 
@@ -49,41 +48,46 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         display_search_UI_emps();
 
         # Delete modal to confirm
-        if($_POST['delete']) displayDeleteModal($_POST['fullname'], $_POST['delete']);
+        if(isset($_POST['delete'])) displayDeleteModal($_POST['fullname'], $_POST['delete']);
+
         # If confirmed deleting from DB
-        if($delete_emp) {
-            $conn->exec($delete_emp);
-            echo '<h4 class="text-center mt-3 display-4">Employee deleted successfully</h4>';
+        if(isset($_POST['confirm_delete']) && isset($_POST['emp_id'])) {
+            DeleteHelper::delete_emp($conn, $_POST['emp_id']);
+            echo '<h4 class="text-center mt-3 display-5">Employee deleted successfully</h4>';
         }
+
         # Create
-        if($create_emp) {
-            $conn->exec($create_emp);
-            echo '<h4 class="text-center mt-3 display-4">Employee added successfully </h4>';
-        };
-        # Update
-        if($update_emp) {
-            $conn->exec($update_emp);
-            echo '<h4 class="text-center mt-3 display-4">Employee updated successfully </h4>';
+        if(isset($_POST['new'])) {
+            CreateHelper::create_emp($conn, $_POST['firstname'], $_POST['lastname']);
+            echo '<h4 class="text-center mt-3 display-5">Employee added successfully </h4>';
+
         }
+
+        # Update
+        if(isset($_POST['edit'])) {
+            EditHelper::edit_emp($conn, $_POST['firstname'], $_POST['lastname'], $_POST['emp_id']);
+            echo '<h4 class="text-center mt-3 display-5">Employee updated successfully </h4>';
+        }
+
             $OFFSET = $_SESSION['employees_offset'];
             //Getting min and max values in the current OFFSET to know which id's to display
-            $min = Helper::get_min_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "employees");
-            $max = Helper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "employees");
+            $min = ShowHelper::get_min_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "employees");
+            $max = ShowHelper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "employees");
             // Getting overall max id to know when not to display "next" button
-            $max_overall_id = Helper::get_max_overall_id($conn, "employees");
+            $max_overall_id = ShowHelper::get_max_overall_id($conn, "employees");
             // Displaying accordingly if search by id
             if($_POST['search_by_id']) {
                 $emp_id = $_POST['search_by_id'];
-                $stmt = Helper::show_emp_by_id($conn, $emp_id);
+                $stmt = ShowHelper::show_emp_by_id($conn, $emp_id);
             }
             // Displaying accordingly if search by lastname
             else if($_POST['search_by_lastname']) {
                 $lastname = $_POST['search_by_lastname'];
-                $stmt = Helper::show_emp_by_lastname($conn, $lastname);
+                $stmt = ShowHelper::show_emp_by_lastname($conn, $lastname);
             }
             // Show first page by default
             else {
-            $stmt = Helper::show_all_emps($conn, $min, $max);
+            $stmt = ShowHelper::show_all_emps($conn, $min, $max);
             }
         $employees = [];
         foreach (new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
@@ -105,7 +109,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     }
     $conn = null;
 
-    if(count($employees) > 0) {
+    if($employees) {
     echo '<div class="container mt-5 mb-5">
     <table class="table table-bordered table-hover">
     <thead class="thead-dark">
@@ -185,7 +189,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
 
 }
 else {
-    echo '<h2 class="display-3 text-center">Sorry, failed to retrieve data </h2>';
+    echo '<h2 class="display-6 text-center">0 Results </h2>';
 }
     ?>
     <?php

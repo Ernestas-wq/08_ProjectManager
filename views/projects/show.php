@@ -34,10 +34,10 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('../../partials/navbar.php');
     require('../../partials/search.php');
     require('../../Classes/Project.php');
-    require('../../Classes/Helper.php');
-    require('../../CRUD/create.php');
-    require('../../CRUD/update.php');
-    require('../../CRUD/delete.php');
+    require('../../Classes/ShowHelper.php');
+    require('../../Classes/EditHelper.php');
+    require('../../Classes/CreateHelper.php');
+    require('../../Classes/DeleteHelper.php');
     require('delete.php');
 
 
@@ -49,57 +49,57 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
            # Delete modal to confirm
         if($_POST['delete']) displayDeleteModal($_POST['project_name'], $_POST['delete']);
            # If confirmed deleting from DB
-        if($delete_proj) {
-            $conn->exec($delete_proj);
-            echo '<h4 class="text-center mt-3 display-4">Proejct deleted successfully </h4>';
+
+
+         if(isset($_POST['confirm_delete']) && isset($_POST['proj_id'])) {
+            DeleteHelper::delete_proj($conn, $_POST['proj_id']);
+            echo '<h4 class="text-center mt-3 display-5">Proejct deleted successfully </h4>';
+         }
+
+
+        if(isset($_POST['new'])) {
+            CreateHelper::create_proj($conn, $_POST['project_name']);
+            echo '<h4 class="text-center mt-3 display-5">Proejct added successfully </h4>';
         }
-        if($create_proj) {
-            $conn->exec($create_proj);
-            echo '<h4 class="text-center mt-3 display-4">Proejct added successfully </h4>';
+
+        if(isset($_POST['edit'])) {
+            EditHelper::edit_proj($conn, $_POST['project_name'], $_POST['proj_id']);
+            echo '<h4 class="text-center mt-3 display-5">Proejct updated successfully </h4>';
         }
-        if($update_proj) {
-            $conn->exec($update_proj);
-            echo '<h4 class="text-center mt-3 display-4">Proejct updated successfully </h4>';
-        }
+
         # Assign employee to a project by fullname
         if($_POST['assign_by_fullname']) {
-            $first = $_POST['firstname'];
-            $last = $_POST['lastname'];
-            $proj_id = $_POST['proj_id'];
-            $emp_id = Helper::get_emp_id_by_fullname($conn, $first, $last);
-            // print_r($first . " ".  $last. " " . $proj_id . " " . $emp_id);
-            Helper::assign_emp_to_proj($conn, $emp_id, $proj_id);
+            $emp_id = ShowHelper::get_emp_id_by_fullname($conn, $_POST['firstname'], $_POST['lastname']);
+            ShowHelper::assign_emp_to_proj($conn, $emp_id, $_POST['proj_id']);
         }
         # Assign employee to a project by id
         if($_POST['assign_by_id']) {
             $proj_id = $_POST['proj_id'];
             $emp_id = $_POST['emp_id'];
-            Helper::assign_emp_to_proj($conn, $emp_id, $proj_id);
+            ShowHelper::assign_emp_to_proj($conn, $emp_id, $proj_id);
         }
-
 
         // Getting the neccessary parameters for next and previous
         $OFFSET = $_SESSION['projects_offset'];
-        $min = Helper::get_min_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
-        $max = Helper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
-        $max_overall_id = Helper::get_max_overall_id($conn, "projects");
-
+        $min = ShowHelper::get_min_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
+        $max = ShowHelper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
+        $max_overall_id = ShowHelper::get_max_overall_id($conn, "projects");
 
         // Display by id
 
         if($_POST['search_by_id']) {
             $proj_id = $_POST['search_by_id'];
-            $stmt = Helper::show_proj_by_id($conn, $proj_id);
+            $stmt = ShowHelper::show_proj_by_id($conn, $proj_id);
         }
         // Display by project name
 
         else if($_POST['search_by_name']) {
             $proj_name = $_POST['search_by_name'];
-            $stmt = Helper::show_proj_by_name($conn, $proj_name);
+            $stmt = ShowHelper::show_proj_by_name($conn, $proj_name);
         }
                 // Showing all by default
         else {
-        $stmt = Helper::show_all_projs($conn, $min, $max);
+        $stmt = ShowHelper::show_all_projs($conn, $min, $max);
         }
         $projects = [];
 
@@ -206,7 +206,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
 
 }
     else {
-        echo '<h2 class="display-3 text-center">Sorry, failed to retrieve data </h2>';
+        echo '<h2 class="display-6 text-center">0 Results</h2>';
     }
 ?>
     <?php

@@ -1,31 +1,31 @@
 <?php declare(strict_types=1)?>
 <?php
-Class Helper {
+Class ShowHelper {
 
     public static function get_min_id_per_page(PDO $conn,int $res,int $offs, string $table){
-            $id_values_10 = [];
+            $id_values = [];
             $min_max = "SELECT id FROM $table
             LIMIT $res OFFSET $offs;";
             $stmt = $conn->prepare($min_max);
             $res = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
-                array_push($id_values_10, $v['id']);
+                array_push($id_values, $v['id']);
             }
-           return min($id_values_10);
+           return min($id_values);
     }
 
     public static function get_max_id_per_page(PDO $conn, int $res, int $offs, string $table) {
-            $id_values_10 = [];
+            $id_values = [];
             $que = "SELECT id FROM $table
             LIMIT $res OFFSET $offs;";
             $stmt = $conn->prepare($que);
             $res = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
-                array_push($id_values_10, $v['id']);
+                array_push($id_values, $v['id']);
             }
-           return max($id_values_10);
+           return max($id_values);
     }
     public static function get_max_overall_id(PDO $conn, string $table){
         $que = "SELECT MAX(id) AS max_id FROM $table";

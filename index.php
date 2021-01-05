@@ -7,14 +7,8 @@ $users = json_decode($str, true);
 
 if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_POST['username'])
 && !empty($_POST['password'])) {
-    // print_r($_POST['username']);
-    // print_r($_POST['password']);
-
+    #Validating log in from users.json
     foreach($users as $user => $v) {
-
-        //  print_r($users[$k]). '<br>';
-        // echo $k . ' <br>';
-        // echo $k . " " . $v['password'] . " " . $v['app_user'] . "<br>";
         if($_POST['username'] === $user && $_POST['password'] === $v['password']){
             $_SESSION['logged_in'] = true;
             $_SESSION['timeout'] = time();
@@ -46,6 +40,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
     <div class="container d-flex flex-column align-items-center">
     <h1 class="text-center mt-5 display-3 text-primary">Project Manager</h1>
     <?php
+    #Session clear out after log out
     if(isset($_GET['action']) and $_GET['action'] === 'logout') {
         session_start();
         unset($_SESSION['username']);
