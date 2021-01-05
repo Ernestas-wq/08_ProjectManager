@@ -57,7 +57,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         display_search_UI_projs();
         display_results_to_show(5, 10, 15);
            # Delete modal to confirm
-        if($_POST['delete']) displayDeleteModal($_POST['project_name'], $_POST['delete']);
+        if($_POST['delete']) display_delete_modal($_POST['project_name'], $_POST['delete']);
            # If confirmed deleting from DB
 
 

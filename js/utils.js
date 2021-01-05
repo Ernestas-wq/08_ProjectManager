@@ -1,13 +1,13 @@
 const searchById = document.getElementById('searchById');
 const searchByLastName = document.getElementById('searchByLastName');
 const searchByName = document.getElementById('searchByName');
-$('.close_delete_emp_modal').on('click', function(e) {
-	$('#delete_emp_modal')
+$('.closeDeleteEmpModal').on('click', function(e) {
+	$('#deleteEmpModal')
 		.css('display', 'none')
 		.css('opacity', 0);
 });
-$('.close_delete_proj_modal').on('click', function(e) {
-	$('#delete_proj_modal')
+$('.closeDeleteProjModal').on('click', function(e) {
+	$('#deleteProjModal')
 		.css('display', 'none')
 		.css('opacity', 0);
 });

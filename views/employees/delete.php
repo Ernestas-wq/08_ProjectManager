@@ -1,8 +1,8 @@
 <?php declare(strict_types=1)
 ?>
 <?php
-function displayDeleteModal(string $name, int $id) {
-   echo '<div class="modal fade mt-5" tabindex="-1" style="display:block;opacity:1" id="delete_emp_modal">
+function display_delete_modal(string $name, int $id) {
+   echo '<div class="modal fade mt-5" tabindex="-1" style="display:block;opacity:1" id="deleteEmpModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header mt-2">
@@ -16,7 +16,7 @@ function displayDeleteModal(string $name, int $id) {
         <input type="hidden" name="emp_id" value="'. $id .'">
         <button type="submit" class="btn btn-success">Yes</button>
         </form>
-        <button type="button" class="btn btn-danger close_delete_emp_modal">No</button>
+        <button type="button" class="btn btn-danger closeDeleteEmpModal">No</button>
     </div>
         </div>
       </div>

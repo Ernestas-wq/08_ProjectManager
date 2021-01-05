@@ -53,7 +53,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         display_search_UI_emps();
         display_results_to_show(10, 15, 20);
         # Delete modal to confirm
-        if(isset($_POST['delete'])) displayDeleteModal($_POST['fullname'], $_POST['delete']);
+        if(isset($_POST['delete'])) display_delete_modal($_POST['fullname'], $_POST['delete']);
 
         # If confirmed deleting from DB
         if(isset($_POST['confirm_delete']) && isset($_POST['emp_id'])) {
@@ -100,11 +100,11 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
             if (array_key_exists($v['id'], $employees) && $v['project_name']) {
                 $employees[$v['id']]->populate_projects($v['project_name']);
             } else {
-                $e = new Employee();
-                $e->set_firstname($v['firstname']);
-                $e->set_lastname($v['lastname']);
-                $e->populate_projects($v['project_name']);
-                $employees += [$v['id'] => $e];
+                $emp = new Employee();
+                $emp->set_firstname($v['firstname']);
+                $emp->set_lastname($v['lastname']);
+                $emp->populate_projects($v['project_name']);
+                $employees += [$v['id'] => $emp];
             }
         }
     }
