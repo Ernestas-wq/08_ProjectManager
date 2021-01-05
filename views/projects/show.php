@@ -1,6 +1,14 @@
 <?php
 session_start();
-    $RESULTS_TO_LOAD = 10;
+
+if(isset($_POST['show']) && $_SESSION['logged_in']) {
+    # Results to show
+    if(isset($_POST['results_to_show'])) {
+        $_SESSION['results_to_show_projs'] = $_POST['results_to_show'];
+    }
+    $RESULTS_TO_SHOW = $_SESSION['results_to_show_projs'];
+
+
     // Reseting page count if not next or prev
     if(!$_POST['next'] && !$_POST['prev'] && !$_POST['delete'] && !$_POST['edit']
     && !$_POST['assign'] ) {
@@ -8,14 +16,14 @@ session_start();
     }
     // Incrementing results to show by 10
     if($_POST['next']) {
-        $_SESSION['projects_offset'] += $RESULTS_TO_LOAD;
+        $_SESSION['projects_offset'] += $RESULTS_TO_SHOW;
     }
     // Decrementing results to show by 10
     if($_POST['prev']) {
-      $_SESSION['projects_offset'] -= $RESULTS_TO_LOAD;
+      $_SESSION['projects_offset'] -= $RESULTS_TO_SHOW;
     }
 
-if(isset($_POST['show']) && $_SESSION['logged_in']) {
+
     $servername = "localhost";
     $db_name = "ProjectManagerDB";
     if($_SESSION['app_user']){
@@ -33,6 +41,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('../../partials/head.php');
     require('../../partials/navbar.php');
     require('../../partials/search.php');
+    require('../../partials/pages_to_load.php');
     require('../../Classes/Project.php');
     require('../../Classes/ShowHelper.php');
     require('../../Classes/EditHelper.php');
@@ -46,6 +55,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         display_search_UI_projs();
+        display_results_to_show(5, 10, 15);
            # Delete modal to confirm
         if($_POST['delete']) displayDeleteModal($_POST['project_name'], $_POST['delete']);
            # If confirmed deleting from DB
@@ -81,8 +91,8 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
 
         // Getting the neccessary parameters for next and previous
         $OFFSET = $_SESSION['projects_offset'];
-        $min = ShowHelper::get_min_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
-        $max = ShowHelper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
+        $min = ShowHelper::get_min_id_per_page($conn, $RESULTS_TO_SHOW, $OFFSET, "projects");
+        $max = ShowHelper::get_max_id_per_page($conn, $RESULTS_TO_SHOW, $OFFSET, "projects");
         $max_overall_id = ShowHelper::get_max_overall_id($conn, "projects");
 
         // Display by id

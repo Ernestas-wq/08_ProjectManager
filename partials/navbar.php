@@ -45,4 +45,4 @@ echo '<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
 
 echo '</div>
 </nav>
-<main class="container mt-5">';
+<main class="container mt-5" style="position: relative;">';

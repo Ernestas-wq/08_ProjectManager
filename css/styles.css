@@ -99,3 +99,22 @@ input[type=number] {
 	color: var(--soft_green);
 	font-weight: 500;
 }
+.pageToLoadUI {
+	display: flex;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.pageToLoadUI form {
+	margin-right: 10px;
+}
+.pageToLoadUI form button {
+	border: none;
+	background: none;
+	color: var(--soft_blue);
+	transition: all ease 0.7s;
+}
+.pageToLoadUI form button:hover {
+	color: var(--soft_green);
+	transform: translateY(1px);
+}

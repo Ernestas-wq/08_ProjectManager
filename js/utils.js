@@ -1,6 +1,6 @@
 const searchById = document.getElementById('searchById');
 const searchByLastName = document.getElementById('searchByLastName');
-console.log(searchByLastName);
+const searchByName = document.getElementById('searchByName');
 $('.close_delete_emp_modal').on('click', function(e) {
 	$('#delete_emp_modal')
 		.css('display', 'none')
@@ -20,6 +20,12 @@ $('#searchByIdForm').on('submit', function(e) {
 });
 $('#searchByLastnameForm').on('submit', function(e) {
 	if (searchByLastName.value.length === 0) {
+		e.preventDefault();
+		$('#searchUiValidationMessage').text('Please enter a value');
+	}
+});
+$('#searchByNameForm').on('submit', function(e) {
+	if (searchByName.value.length === 0) {
 		e.preventDefault();
 		$('#searchUiValidationMessage').text('Please enter a value');
 	}

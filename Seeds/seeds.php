@@ -15,7 +15,7 @@ try {
               ";
     $conn->exec($clear);
     // Seeding Employees
-    for ($i = 1; $i <= 25; $i++) {
+    for ($i = 1; $i <= 50; $i++) {
         $randFirst = mt_rand(0, count($seedsFirstNames) - 1);
         $randLast = mt_rand(0, count($seedsLastNames) - 1);
         $SQL = "INSERT INTO projectmanagerdb.employees
@@ -35,7 +35,7 @@ try {
     // First we make sure each project has atleast 1 Employee
     $combos = [];
     for ($i = 0; $i < count($seedsProjects); $i++) {
-        $randEmp = mt_rand(1, 25);
+        $randEmp = mt_rand(1, 50);
         $SQL = "INSERT INTO projectmanagerdb.employees_projects
                 (project_id, employee_id)
                 VALUES ($i+1, $randEmp);";
@@ -43,18 +43,19 @@ try {
         $conn->exec($SQL);
     }
     // print_r($combos);
+
     // Making some more random connections
-    for ($i = 0; $i < 15; $i++) {
-        $randEmp = mt_rand(1, 25);
-        $randProject = mt_rand(1, 10);
+    for ($i = 0; $i < 45; $i++) {
+        $randEmp = mt_rand(1, 45);
+        $randProject = mt_rand(1, count($seedsProjects));
         $SQL = "INSERT INTO projectmanagerdb.employees_projects
                 (project_id, employee_id)
                 VALUES ($randProject, $randEmp)";
-        if (!in_array([$randEmp, $randProject], $combos)) {
+        if (!in_array([$randProject, $randEmp], $combos)){
+            array_push($combos, [$randProject, $randEmp]);
             $conn->exec($SQL);
         }
     };
-
 
     echo 'Seeded successfully';
 } catch (PDOException $e) {

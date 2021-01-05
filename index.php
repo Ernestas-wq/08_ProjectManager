@@ -16,6 +16,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
             $_SESSION['app_user'] = $v['app_user'];
             $_SESSION['employees_offset'] = 0;
             $_SESSION['projects_offset'] = 0;
+            $_SESSION['results_to_show_emps'] = 10;
+            $_SESSION['results_to_show_projs'] = 5;
         }
         }
 
@@ -49,6 +51,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
         unset($_SESSION['app_user']);
         unset($_SESSION['employees_offset']);
         unset($_SESSION['projects_offset']);
+        unset($_SESSION['results_to_show_emps']);
+        unset($_SESSION['results_to_show_projs']);
     }
 
     ?>

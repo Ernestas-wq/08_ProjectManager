@@ -2,18 +2,22 @@
 session_start();
 
 if(isset($_POST['show']) && $_SESSION['logged_in']) {
-    $RESULTS_TO_LOAD = 10;
+
+    if(isset($_POST['results_to_show'])) {
+        $_SESSION['results_to_show_emps'] = $_POST['results_to_show'];
+    }
+    $RESULTS_TO_SHOW = $_SESSION['results_to_show_emps'];
     // Reseting page count if not next or prev
     if(!$_POST['next'] && !$_POST['prev'] && !$_POST['delete'] && !$_POST['edit']) {
         $_SESSION['employees_offset'] = 0;
     }
     // Incrementing results to show by 10
     if($_POST['next']) {
-        $_SESSION['employees_offset'] += $RESULTS_TO_LOAD;
+        $_SESSION['employees_offset'] += $RESULTS_TO_SHOW;
     }
     // Decrementing results to show by 10
     if($_POST['prev']) {
-      $_SESSION['employees_offset'] -= $RESULTS_TO_LOAD;
+      $_SESSION['employees_offset'] -= $RESULTS_TO_SHOW;
     }
 // Logging in to db
     $servername = "localhost";
@@ -33,6 +37,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('../../partials/head.php');
     require('../../partials/navbar.php');
     require('../../partials/search.php');
+    require('../../partials/pages_to_load.php');
     require('../../Classes/Employee.php');
     require('../../Classes/EditHelper.php');
     require('../../Classes/CreateHelper.php');
@@ -46,7 +51,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         display_search_UI_emps();
-
+        display_results_to_show(10, 15, 20);
         # Delete modal to confirm
         if(isset($_POST['delete'])) displayDeleteModal($_POST['fullname'], $_POST['delete']);
 
@@ -71,8 +76,8 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
 
             $OFFSET = $_SESSION['employees_offset'];
             //Getting min and max values in the current OFFSET to know which id's to display
-            $min = ShowHelper::get_min_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "employees");
-            $max = ShowHelper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "employees");
+            $min = ShowHelper::get_min_id_per_page($conn, $RESULTS_TO_SHOW, $OFFSET, "employees");
+            $max = ShowHelper::get_max_id_per_page($conn, $RESULTS_TO_SHOW, $OFFSET, "employees");
             // Getting overall max id to know when not to display "next" button
             $max_overall_id = ShowHelper::get_max_overall_id($conn, "employees");
             // Displaying accordingly if search by id
