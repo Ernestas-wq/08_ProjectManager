@@ -32,6 +32,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     <?php
     require('../../partials/head.php');
     require('../../partials/navbar.php');
+    require('../../partials/search.php');
     require('../../Classes/Project.php');
     require('../../Classes/Helper.php');
     require('../../CRUD/create.php');
@@ -45,7 +46,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     try{
         $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+        display_search_UI_projs();
            # Delete modal to confirm
         if($_POST['delete']) displayDeleteModal($_POST['project_name'], $_POST['delete']);
            # If confirmed deleting from DB
@@ -81,7 +82,18 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         $max_overall_id = Helper::get_max_overall_id($conn, "projects");
 
         // Showing all by default
+
+        if($_POST['search_by_id']) {
+            $proj_id = $_POST['search_by_id'];
+            $stmt = Helper::show_proj_by_id($conn, $proj_id);
+        }
+        else if($_POST['search_by_name']) {
+            $proj_name = $_POST['search_by_name'];
+            $stmt = Helper::show_proj_by_name($conn, $proj_name);
+        }
+        else {
         $stmt = Helper::show_all_projs($conn, $min, $max);
+        }
         $projects = [];
 
         foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v){

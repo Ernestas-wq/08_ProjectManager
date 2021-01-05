@@ -3,6 +3,7 @@
 	--soft_blue: #457b9d;
 	--text_light: #f1faee;
 	--text_dark: #3d405b;
+	--soft_green: #2a9d8f;
 }
 * {
 	box-sizing: border-box;
@@ -92,4 +93,9 @@ input[type=number] {
 }
 .userUI span {
 	color: var(--soft_blue);
+}
+.input-inner {
+	font-size: 12px;
+	color: var(--soft_green);
+	font-weight: 500;
 }

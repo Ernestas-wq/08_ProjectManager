@@ -67,7 +67,7 @@ Class Helper {
         return $stmt;
     }
 
-    public static function show_emp_by_id(PDO $conn, $id) {
+    public static function show_emp_by_id(PDO $conn, int $id) {
         $que = "SELECT employees.id, firstname, lastname, project_name
         FROM employees
         LEFT JOIN employees_projects
@@ -93,7 +93,33 @@ Class Helper {
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         return $stmt;
+    }
+    public static function show_proj_by_id(PDO $conn, int $id) {
+        $que = "SELECT projects.id, project_name, firstname, lastname
+        FROM projects
+        LEFT JOIN employees_projects
+        ON projects.id=employees_projects.project_id
+        LEFT JOIN employees
+        ON employees.id=employees_projects.employee_id
+        WHERE projects.id = $id;";
+        $stmt = $conn->prepare($que);
+        $stmt-> setFetchMode(PDO::FETCH_ASSOC);
+        $stmt -> execute();
+        return $stmt;
+    }
 
+    public static function show_proj_by_name(PDO $conn, string $name) {
+        $que = "SELECT projects.id, project_name, firstname, lastname
+        FROM projects
+        LEFT JOIN employees_projects
+        ON projects.id=employees_projects.project_id
+        LEFT JOIN employees
+        ON employees.id=employees_projects.employee_id
+        WHERE projects.project_name = '$name';";
+        $stmt = $conn->prepare($que);
+        $stmt-> setFetchMode(PDO::FETCH_ASSOC);
+        $stmt -> execute();
+        return $stmt;
     }
 
 
