@@ -38,7 +38,6 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
     require('../../CRUD/create.php');
     require('../../CRUD/update.php');
     require('../../CRUD/delete.php');
-    require('../../CRUD/assign.php');
     require('delete.php');
 
 
@@ -62,35 +61,43 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
             $conn->exec($update_proj);
             echo '<h4 class="text-center mt-3 display-4">Proejct updated successfully </h4>';
         }
-        # Assign employee to a project
-        if($assign_emp) {
-            $stmt = $conn->prepare($assign_emp);
-            $res = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-            foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
-                $emp_to_assign = $v['emp_id'];
-            }
-            $assign_sql = "INSERT INTO employees_projects
-            (employee_id, project_id)
-            VALUES ($emp_to_assign, $proj_id)";
-            $conn->exec($assign_sql);
+        # Assign employee to a project by fullname
+        if($_POST['assign_by_fullname']) {
+            $first = $_POST['firstname'];
+            $last = $_POST['lastname'];
+            $proj_id = $_POST['proj_id'];
+            $emp_id = Helper::get_emp_id_by_fullname($conn, $first, $last);
+            // print_r($first . " ".  $last. " " . $proj_id . " " . $emp_id);
+            Helper::assign_emp_to_proj($conn, $emp_id, $proj_id);
         }
+        # Assign employee to a project by id
+        if($_POST['assign_by_id']) {
+            $proj_id = $_POST['proj_id'];
+            $emp_id = $_POST['emp_id'];
+            Helper::assign_emp_to_proj($conn, $emp_id, $proj_id);
+        }
+
+
         // Getting the neccessary parameters for next and previous
         $OFFSET = $_SESSION['projects_offset'];
         $min = Helper::get_min_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
         $max = Helper::get_max_id_per_page($conn, $RESULTS_TO_LOAD, $OFFSET, "projects");
         $max_overall_id = Helper::get_max_overall_id($conn, "projects");
 
-        // Showing all by default
+
+        // Display by id
 
         if($_POST['search_by_id']) {
             $proj_id = $_POST['search_by_id'];
             $stmt = Helper::show_proj_by_id($conn, $proj_id);
         }
+        // Display by project name
+
         else if($_POST['search_by_name']) {
             $proj_name = $_POST['search_by_name'];
             $stmt = Helper::show_proj_by_name($conn, $proj_name);
         }
+                // Showing all by default
         else {
         $stmt = Helper::show_all_projs($conn, $min, $max);
         }

@@ -122,6 +122,26 @@ Class Helper {
         return $stmt;
     }
 
+    public static function get_emp_id_by_fullname(PDO $conn, string $first, string $last){
+        $que = "SELECT id AS emp_id
+        FROM employees
+        WHERE firstname='$first'
+        AND lastname='$last';";
+         $stmt = $conn->prepare($que);
+         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+         $stmt->execute();
+         foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
+             $emp_id = $v['emp_id'];
+         }
+         return $emp_id;
+    }
+    public static function assign_emp_to_proj(PDO $conn, int $emp_id, int $proj_id) :void {
+            $que = "INSERT INTO employees_projects
+            (employee_id, project_id)
+            VALUES ($emp_id, $proj_id)";
+            $conn->exec($que);
+    }
+
 
 }
 

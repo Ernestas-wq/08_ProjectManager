@@ -53,7 +53,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
         unset($_SESSION['logged_in']);
         unset($_SESSION['app_user']);
         unset($_SESSION['employees_offset']);
-
+        unset($_SESSION['projects_offset']);
     }
 
     ?>
