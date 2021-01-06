@@ -60,20 +60,30 @@ else {
         # If confirmed deleting from DB
         if(isset($_POST['confirm_delete']) && isset($_POST['emp_id'])) {
             DeleteHelper::delete_emp($conn, $_POST['emp_id']);
-            echo '<h4 class="text-center mt-3 display-5">Employee deleted successfully</h4>';
+            echo '<h4 class="text-center mt-3 display-5">Employee
+            <span class="font-italic font-weight-light">'.$_POST['fullname'].'</span>
+            deleted successfully</h4>';
         }
 
         # Create
         if(isset($_POST['new'])) {
             CreateHelper::create_emp($conn, $_POST['firstname'], $_POST['lastname']);
-            echo '<h4 class="text-center mt-3 display-5">Employee added successfully </h4>';
+            echo '<h4 class="text-center mt-3 display-5">Employee
+            <span class="font-italic font-weight-light">
+            '.$_POST['firstname']. " " .$_POST['lastname'].'
+            </span>
+            added successfully </h4>';
 
         }
 
         # Update
         if(isset($_POST['edit'])) {
             EditHelper::edit_emp($conn, $_POST['firstname'], $_POST['lastname'], $_POST['emp_id']);
-            echo '<h4 class="text-center mt-3 display-5">Employee updated successfully </h4>';
+            echo '<h4 class="text-center mt-3 display-5">Employee
+            <span class="font-italic font-weight-light">
+            '.$_POST['firstname']. " " .$_POST['lastname'].'
+            </span>
+            updated successfully</h4>';
         }
 
             $OFFSET = $_SESSION['employees_offset'];
@@ -85,11 +95,13 @@ else {
             // Displaying accordingly if search by id
             if($_POST['search_by_id']) {
                 $emp_id = $_POST['search_by_id'];
+                $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
                 $stmt = ShowHelper::show_emp_by_id($conn, $emp_id);
             }
             // Displaying accordingly if search by lastname
             else if($_POST['search_by_lastname']) {
                 $lastname = $_POST['search_by_lastname'];
+                $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
                 $stmt = ShowHelper::show_emp_by_lastname($conn, $lastname);
             }
             // Show first page by default

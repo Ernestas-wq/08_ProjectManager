@@ -12,6 +12,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
             <form action="show.php" method="POST" novalidate class="validated-form">
             <input type="hidden" name="assign_by_fullname" value="y">
             <input type="hidden" name="show" value="y">
+            <input type="hidden" name="project_name" value="'.$_POST['project_name'].'">
             <input type="hidden" name="proj_id" value='.$_POST['id'].'>
                 <div class="mb-3">
                     <label class="form-label" for="firstname">Firstname</label>
@@ -36,6 +37,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
             <form action="show.php" method="POST" novalidate class="validated-form">
             <input type="hidden" name="assign_by_id" value="y">
             <input type="hidden" name="show" value="y">
+            <input type="hidden" name="project_name" value="'.$_POST['project_name'].'">
             <input type="hidden" name="proj_id" value='.$_POST['id'].'>
             <div class="mb-3">
             <label class="form-label" for="emp_id">Employee id</label>

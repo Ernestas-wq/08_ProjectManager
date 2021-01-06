@@ -66,30 +66,41 @@ else {
 
          if(isset($_POST['confirm_delete']) && isset($_POST['proj_id'])) {
             DeleteHelper::delete_proj($conn, $_POST['proj_id']);
-            echo '<h4 class="text-center mt-3 display-5">Proejct deleted successfully </h4>';
+            echo '<h4 class="text-center mt-3 display-5">Proejct
+            <span class="font-italic font-weight-light">"'.$_POST['project_name'].'"</span>
+            deleted successfully</h4>';
          }
 
 
         if(isset($_POST['new'])) {
             CreateHelper::create_proj($conn, $_POST['project_name']);
-            echo '<h4 class="text-center mt-3 display-5">Proejct added successfully </h4>';
+            echo '<h4 class="text-center mt-3 display-5">Proejct
+            <span class="font-italic font-weight-light">"'.$_POST['project_name'].'"</span>
+            added successfully </h4>';
         }
 
         if(isset($_POST['edit'])) {
             EditHelper::edit_proj_name($conn, $_POST['project_name'], $_POST['proj_id']);
-            echo '<h4 class="text-center mt-3 display-5">Proejct updated successfully </h4>';
+            echo '<h4 class="text-center mt-3 display-5">Proejct with id '. $_POST['proj_id']. '
+            updated successfully </h4>';
         }
 
         # Assign employee to a project by fullname
         if($_POST['assign_by_fullname']) {
             $emp_id = ShowHelper::get_emp_id_by_fullname($conn, $_POST['firstname'], $_POST['lastname']);
             EditHelper::assign_emp_to_proj($conn, $emp_id, $_POST['proj_id']);
+            echo '<h4 class="text-center mt-3 display-5">Employee '.$_POST['firstname']. " " .
+            $_POST['lastname'].' assigned to '.$_POST['project_name'].' successfully
+             </h4>';
         }
         # Assign employee to a project by id
         if($_POST['assign_by_id']) {
             $proj_id = $_POST['proj_id'];
             $emp_id = $_POST['emp_id'];
             EditHelper::assign_emp_to_proj($conn, $emp_id, $proj_id);
+            echo '<h4 class="text-center mt-3 display-5">Employee with id '.$_POST['emp_id'].
+             ' assigned to '.$_POST['project_name'].' successfully
+             </h4>';
         }
 
         // Getting the neccessary parameters for next and previous
@@ -102,12 +113,14 @@ else {
 
         if($_POST['search_by_id']) {
             $proj_id = $_POST['search_by_id'];
+            $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             $stmt = ShowHelper::show_proj_by_id($conn, $proj_id);
         }
         // Display by project name
 
         else if($_POST['search_by_name']) {
             $proj_name = $_POST['search_by_name'];
+            $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             $stmt = ShowHelper::show_proj_by_name($conn, $proj_name);
         }
                 // Showing all by default
@@ -137,7 +150,7 @@ else {
         echo 'Error: ' . $e->getMessage();
     }
     $conn = null;
-    if(count($projects) > 0) {
+    if($projects) {
     echo '<div class="container mt-5 mb-5">
     <table class="table table-bordered table-hover">
     <thead class="thead-dark">

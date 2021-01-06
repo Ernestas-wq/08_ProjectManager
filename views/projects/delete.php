@@ -12,6 +12,7 @@ function display_delete_modal(string $name, int $id) {
          <form method="POST" action="show.php">
          <input type="hidden" name="confirm_delete" value="y">
          <input type="hidden" name="show" value="y">
+         <input type="hidden" name="project_name" value="'.$_POST['project_name'].'">
          <input type="hidden" name="proj_id" value="'. $id .'">
          <button type="submit" class="btn btn-success">Yes</button>
          </form>

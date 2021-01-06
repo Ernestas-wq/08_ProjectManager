@@ -12,6 +12,7 @@ function display_delete_modal(string $name, int $id) {
         <div class="container d-flex flex-row justify-content-around">
         <form method="POST" action="show.php">
         <input type="hidden" name="confirm_delete" value="y">
+        <input type="hidden" name="fullname" value="'.$name.'">
         <input type="hidden" name="show" value="y">
         <input type="hidden" name="emp_id" value="'. $id .'">
         <button type="submit" class="btn btn-success">Yes</button>
