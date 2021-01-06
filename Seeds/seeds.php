@@ -4,6 +4,8 @@ $username = "app_user";
 $password = "app";
 $db_name = "ProjectManagerDB";
 require('seedData.php');
+$EMPS_TO_GENERATE = 50;
+$CONNECTIONS_TO_GENERATE = 45;
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
@@ -15,7 +17,7 @@ try {
               ";
     $conn->exec($clear);
     // Seeding Employees
-    for ($i = 1; $i <= 50; $i++) {
+    for ($i = 1; $i <= $EMPS_TO_GENERATE; $i++) {
         $randFirst = mt_rand(0, count($seedsFirstNames) - 1);
         $randLast = mt_rand(0, count($seedsLastNames) - 1);
         $SQL = "INSERT INTO projectmanagerdb.employees
@@ -35,7 +37,7 @@ try {
     // First we make sure each project has atleast 1 Employee
     $combos = [];
     for ($i = 0; $i < count($seedsProjects); $i++) {
-        $randEmp = mt_rand(1, 50);
+        $randEmp = mt_rand(1, $EMPS_TO_GENERATE);
         $SQL = "INSERT INTO projectmanagerdb.employees_projects
                 (project_id, employee_id)
                 VALUES ($i+1, $randEmp);";
@@ -45,8 +47,8 @@ try {
     // print_r($combos);
 
     // Making some more random connections
-    for ($i = 0; $i < 45; $i++) {
-        $randEmp = mt_rand(1, 45);
+    for ($i = 0; $i < $CONNECTIONS_TO_GENERATE; $i++) {
+        $randEmp = mt_rand(1, $EMPS_TO_GENERATE);
         $randProject = mt_rand(1, count($seedsProjects));
         $SQL = "INSERT INTO projectmanagerdb.employees_projects
                 (project_id, employee_id)

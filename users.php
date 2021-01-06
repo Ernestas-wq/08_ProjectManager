@@ -18,7 +18,7 @@ try {
     FLUSH PRIVILEGES;
     ";
     $conn->exec($SQL);
-    echo 'User created successfully';
+    echo 'Users created successfully';
 }
 catch(PDOException $e) {
     echo "Error: " . $e->getMessage();

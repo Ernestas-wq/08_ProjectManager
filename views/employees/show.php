@@ -31,7 +31,9 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         $password = "viewer";
     }
 }
-
+else {
+    echo '<h2 class="display-6 text-center">Please log in to view employees</h2>';
+}
 ?>
     <?php
     require('../../partials/head.php');
@@ -93,6 +95,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
             // Show first page by default
             else {
             $stmt = ShowHelper::show_all_emps($conn, $min, $max);
+            var_dump($stmt);
             }
         $employees = [];
         foreach (new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
@@ -103,7 +106,9 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
                 $emp = new Employee();
                 $emp->set_firstname($v['firstname']);
                 $emp->set_lastname($v['lastname']);
+                if($v['project_name']) {
                 $emp->populate_projects($v['project_name']);
+                }
                 $employees += [$v['id'] => $emp];
             }
         }
@@ -113,7 +118,7 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
 
     }
     $conn = null;
-
+    // Visualize retrieved data
     if($employees) {
     echo '<div class="container mt-5 mb-5">
     <table class="table table-bordered table-hover">

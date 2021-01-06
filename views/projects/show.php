@@ -35,6 +35,9 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
         $password = "viewer";
     }
 }
+else {
+    echo '<h2 class="display-6 text-center">Please log in to view projects</h2>';
+}
 
 ?>
     <?php
@@ -123,7 +126,9 @@ if(isset($_POST['show']) && $_SESSION['logged_in']) {
             else {
                 $p = new Project();
                 $p->set_project_name($v['project_name']);
+                if($fullname) {
                 $p->populate_employees($fullname);
+                }
                 $projects += [$v['id'] => $p];
             }
         }
