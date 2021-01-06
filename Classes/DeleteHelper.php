@@ -14,7 +14,7 @@ Class DeleteHelper {
         WHERE project_id = $id;
         DELETE FROM projects
         WHERE id = $id;";
-        $conn->exec($que);
+                                                $conn->exec($que);
     }
 
 

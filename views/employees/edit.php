@@ -16,7 +16,7 @@ echo '<h1 class="text-center">Update Employee</h1>
                 <input class="form-control" type="text" id="firstname" name="firstname"
                 value="'. $_POST['firstname'] .'" required>
                 <div class="valid-feedback">
-                    Looks good!
+                             Looks good!
                 </div>
             </div>
             <div class="mb-3">
