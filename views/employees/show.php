@@ -95,7 +95,6 @@ else {
             // Show first page by default
             else {
             $stmt = ShowHelper::show_all_emps($conn, $min, $max);
-            var_dump($stmt);
             }
         $employees = [];
         foreach (new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
