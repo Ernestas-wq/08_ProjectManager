@@ -1,8 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+<body  class="d-flex flex-column vh-100 container">
+
+
 <?php
 $servername = "localhost";
 $username = "admin";
 $password = "adm";
-
 
 // Creating DB
 try {
@@ -13,9 +24,10 @@ try {
 utf8mb4_lithuanian_ci DEFAULT ENCRYPTION='N'";
     // No results are returned so using exec
     $conn->exec($SQL);
-    echo "Database created successfully" . "<br>";
+    echo '<h2 class="display-3 text-center text-info">Database created successfully</h2>';
 } catch (PDOException $e) {
-    echo $SQL . "<br>" . $e->getMessage();
+    echo '<h2 class="display-3 text-center text-danger">Failed creating database</h2><br>'
+    . $e->getMessage();
 };
 $conn = null;
 
@@ -47,10 +59,14 @@ CREATE TABLE IF NOT EXISTS Employees_Projects(
     UNIQUE (employee_id, project_id)
     ) ENGINE=INNODB;";
     $conn->exec($SQL_TABLES);
-    echo "Tables created successfully";
+    echo '<h2 class="display-3 mt-4 text-center text-info">Tables created successfully</h2>';
 } catch (PDOException $e) {
-    echo "Error: " . "<br>" . $e->getMessage();
+    echo '<h2 class="display-3 mt-3 text-center text-danger">Failed creating tables</h2><br>'
+    . $e->getMessage();
 };
 $conn = null;
 
 ?>
+</body>
+
+</html>
