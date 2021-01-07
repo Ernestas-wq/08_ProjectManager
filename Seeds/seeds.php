@@ -13,7 +13,7 @@ $servername = "localhost";
 $username = "app_user";
 $password = "app";
 $db_name = "ProjectManagerDB";
-require('seedData.php');
+require 'seedData.php';
 $EMPS_TO_GENERATE = 50;
 $CONNECTIONS_TO_GENERATE = 45;
 
@@ -63,11 +63,12 @@ try {
         $SQL = "INSERT INTO projectmanagerdb.employees_projects
                 (project_id, employee_id)
                 VALUES ($randProject, $randEmp)";
-        if (!in_array([$randProject, $randEmp], $combos)){
+        if (!in_array([$randProject, $randEmp], $combos)) {
             array_push($combos, [$randProject, $randEmp]);
             $conn->exec($SQL);
         }
-    };
+    }
+    ;
 
     echo '<h2 class="display-3 text-center text-info">Database seeded successfully</h2>';
 } catch (PDOException $e) {

@@ -3,11 +3,11 @@ session_start();
 $str = file_get_contents('users.json');
 $users = json_decode($str, true);
 
-if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_POST['username'])
-&& !empty($_POST['password'])) {
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_POST['username'])
+    && !empty($_POST['password'])) {
     #Validating log in from users.json
-    foreach($users as $user => $v) {
-        if($_POST['username'] === $user && $_POST['password'] === $v['password']){
+    foreach ($users as $user => $v) {
+        if ($_POST['username'] === $user && $_POST['password'] === $v['password']) {
             $_SESSION['logged_in'] = true;
             $_SESSION['timeout'] = time();
             $_SESSION['username'] = $user;
@@ -17,7 +17,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
             $_SESSION['results_to_show_emps'] = 10;
             $_SESSION['results_to_show_projs'] = 5;
         }
-        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -37,26 +37,25 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
     <div class="container d-flex flex-column align-items-center">
     <h1 class="text-center mt-5 display-3 text-primary">Project Manager</h1>
     <?php
-    #Session clear out after log out
-    if(isset($_GET['action']) and $_GET['action'] === 'logout') {
-        session_start();
-        unset($_SESSION['username']);
-        unset($_SESSION['password']);
-        unset($_SESSION['logged_in']);
-        unset($_SESSION['app_user']);
-        unset($_SESSION['employees_offset']);
-        unset($_SESSION['projects_offset']);
-        unset($_SESSION['results_to_show_emps']);
-        unset($_SESSION['results_to_show_projs']);
-    }
+#Session clear out after log out
+if (isset($_GET['action']) and $_GET['action'] === 'logout') {
+    session_start();
+    unset($_SESSION['username']);
+    unset($_SESSION['password']);
+    unset($_SESSION['logged_in']);
+    unset($_SESSION['app_user']);
+    unset($_SESSION['employees_offset']);
+    unset($_SESSION['projects_offset']);
+    unset($_SESSION['results_to_show_emps']);
+    unset($_SESSION['results_to_show_projs']);
+}
 
-    ?>
+?>
     <?php
 
-
-    if($_SESSION['logged_in'] === true) {
-        echo '<h3 class="display-6 mt-4 text-secondary">
-        Welcome, '.$_SESSION['username'].', you have successfully logged in
+if ($_SESSION['logged_in'] === true) {
+    echo '<h3 class="display-6 mt-4 text-secondary">
+        Welcome, ' . $_SESSION['username'] . ', you have successfully logged in
         </h3>
         <form action="views/employees/show.php" class="mt-5" method="POST">
             <input type="hidden" name="show" value="y">
@@ -64,8 +63,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
             style="font-size:24px">
             Get started</button>
         </form>';
-    }
-    else {
+} else {
     echo '<h3 class="text-danger display-6 mt-4 text-center" id="passwordValidationMessage"></h3>
     <form class="login mt-3 validated-form" action="index.php" id="login" method="POST">
         <input type="hidden" name="login" value="y">
@@ -84,7 +82,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['login']) && !empty($_P
         <button type="Submit" class="btn btn-dark">Login</button>
     </form>
 </div>';
-    }
+}
 ?>
 
 

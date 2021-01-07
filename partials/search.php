@@ -1,6 +1,7 @@
-<?php declare(strict_types=1)?>
+<?php declare (strict_types = 1) ?>
 <?php
-function display_search_UI_emps() {
+function display_search_UI_emps()
+{
     echo '
     <div class="container">
     <h3 class="text-danger display-6 mt-4 text-center" id="searchUiValidationMessage"></h3>
@@ -27,7 +28,8 @@ function display_search_UI_emps() {
 
 }
 
-function display_search_UI_projs() {
+function display_search_UI_projs()
+{
     echo '
     <div class="container">
     <h3 class="text-danger display-6 mt-4 text-center" id="searchUiValidationMessage"></h3>
@@ -52,6 +54,3 @@ function display_search_UI_projs() {
 </form>
 </div>';
 }
-
-
-?>

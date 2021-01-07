@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-require('../../partials/head.php');
-require('../../partials/navbar.php');
-if($_SESSION['logged_in']) {
-echo '<h1 class="text-center">New Project</h1>
+require '../../partials/head.php';
+require '../../partials/navbar.php';
+if ($_SESSION['logged_in']) {
+    echo '<h1 class="text-center">New Project</h1>
 <div class="row">
     <div class="col-6 offset-3">
         <form action="show.php" method="POST" novalidate class="validated-form">
@@ -23,8 +23,8 @@ echo '<h1 class="text-center">New Project</h1>
         </form>
     </div>
 </div>';
+} else {
+    echo '<h2 class="display-3 text-center text-danger">Pleaes login to add a project</h2> ';
 }
-else echo '<h2 class="display-3 text-center text-danger">Pleaes login to add a project</h2> ';
 
-
-require('../../partials/footer.php');
+require '../../partials/footer.php';
