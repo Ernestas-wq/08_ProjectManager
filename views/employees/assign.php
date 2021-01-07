@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <form action="show.php" method="POST" novalidate class="validated-form">
             <input type="hidden" name="assign_emp_to_proj" value="y">
             <input type="hidden" name="show" value="y">
+            <input type="hidden" name="fullname" value="'.$_POST['fullname'].'">
             <input type="hidden" name="emp_id" value=' . $_POST['id'] . '>
                 <div class="mb-3">
                     <label class="form-label" for="project_name">Project name</label>

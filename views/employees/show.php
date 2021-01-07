@@ -109,6 +109,8 @@ if (isset($_POST['assign_emp_to_proj'])) {
     try {
         $proj_id = ShowHelper::get_proj_id_by_name($conn, $_POST['project_name']);
         EditHelper::assign_proj_to_emp($conn, $_POST['emp_id'], $proj_id);
+        success_message('Employee '.$_POST['fullname'].' was assigned to '.$_POST['project_name'].'
+        successfully');
     } catch (Throwable $e) {
         error_message("Project by this name doesn't
         exist or employee already assigned to this project");
