@@ -31,8 +31,6 @@ if (isset($_POST['show']) && $_SESSION['logged_in']) {
         $username = "app_viewer";
         $password = "viewer";
     }
-} else {
-    echo '<h2 class="display-6 text-center">Please log in to view projects</h2>';
 }
 
 ?>
@@ -41,6 +39,7 @@ require '../../partials/head.php';
 require '../../partials/navbar.php';
 require '../../partials/search.php';
 require '../../partials/pages_to_load.php';
+require '../../partials/utility_messages.php';
 require '../../Classes/Project.php';
 require '../../Classes/ShowHelper.php';
 require '../../Classes/EditHelper.php';
@@ -49,55 +48,17 @@ require '../../Classes/DeleteHelper.php';
 require 'delete.php';
 
 echo '<h1 class="text-center mt-3 display-3 text-secondary">All Projects</h1>';
+
+display_search_UI_projs();
+display_results_to_show(5, 10, 15);
+
+if (!$_SESSION['logged_in']) {
+    echo '<h2 class="display-6 text-center">Please log in to view projects</h2>';
+}
+
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$db_name", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    display_search_UI_projs();
-    display_results_to_show(5, 10, 15);
-    # Delete modal to confirm
-    if ($_POST['delete']) {
-        display_delete_modal($_POST['project_name'], $_POST['delete']);
-    }
-
-    # If confirmed deleting from DB
-
-    if (isset($_POST['confirm_delete']) && isset($_POST['proj_id'])) {
-        DeleteHelper::delete_proj($conn, $_POST['proj_id']);
-        echo '<h4 class="text-center mt-3 display-5">Proejct
-            <span class="font-italic font-weight-light">"' . $_POST['project_name'] . '"</span>
-            deleted successfully</h4>';
-    }
-
-    if (isset($_POST['new'])) {
-        CreateHelper::create_proj($conn, $_POST['project_name']);
-        echo '<h4 class="text-center mt-3 display-5">Proejct
-            <span class="font-italic font-weight-light">"' . $_POST['project_name'] . '"</span>
-            added successfully </h4>';
-    }
-
-    if (isset($_POST['edit'])) {
-        EditHelper::edit_proj_name($conn, $_POST['project_name'], $_POST['proj_id']);
-        echo '<h4 class="text-center mt-3 display-5">Proejct with id ' . $_POST['proj_id'] . '
-            updated successfully </h4>';
-    }
-
-    # Assign employee to a project by fullname
-    if ($_POST['assign_by_fullname']) {
-        $emp_id = ShowHelper::get_emp_id_by_fullname($conn, $_POST['firstname'], $_POST['lastname']);
-        EditHelper::assign_emp_to_proj($conn, $emp_id, $_POST['proj_id']);
-        echo '<h4 class="text-center mt-3 display-5">Employee ' . $_POST['firstname'] . " " .
-            $_POST['lastname'] . ' assigned to ' . $_POST['project_name'] . ' successfully
-             </h4>';
-    }
-    # Assign employee to a project by id
-    if ($_POST['assign_by_id']) {
-        $proj_id = $_POST['proj_id'];
-        $emp_id = $_POST['emp_id'];
-        EditHelper::assign_emp_to_proj($conn, $emp_id, $proj_id);
-        echo '<h4 class="text-center mt-3 display-5">Employee with id ' . $_POST['emp_id'] .
-            ' assigned to ' . $_POST['project_name'] . ' successfully
-             </h4>';
-    }
 
     // Getting the neccessary parameters for next and previous
     $OFFSET = $_SESSION['projects_offset'];
@@ -105,26 +66,100 @@ try {
     $max = ShowHelper::get_max_id_per_page($conn, $RESULTS_TO_SHOW, $OFFSET, "projects");
     $max_overall_id = ShowHelper::get_max_overall_id($conn, "projects");
 
-    // Display by id
+} catch (PDOException $e) {
+    // echo 'Error: ' . $e->getMessage();
+    error_message("Failed connecting to database");
+}
 
-    if ($_POST['search_by_id']) {
+# Delete modal to confirm
+if ($_POST['delete']) {
+    display_delete_modal($_POST['project_name'], $_POST['delete']);
+}
+
+# If confirmed deleting from DB
+
+if (isset($_POST['confirm_delete']) && isset($_POST['proj_id'])) {
+    DeleteHelper::delete_proj($conn, $_POST['proj_id']);
+    echo '<h4 class="text-center mt-3 display-5">Proejct
+            <span class="font-italic font-weight-light">"' . $_POST['project_name'] . '"</span>
+            deleted successfully</h4>';
+}
+
+if (isset($_POST['new'])) {
+    if ($_POST['project_name']) {
+        CreateHelper::create_proj($conn, $_POST['project_name']);
+        echo success_message('Proejct <span class="font-italic font-weight-light">"
+    ' . $_POST['project_name'] . '"</span> added successfully');
+    } else {
+        error_message("Project must have a name");
+    }
+}
+
+if (isset($_POST['edit'])) {
+    if ($_POST['project_name']) {
+        EditHelper::edit_proj_name($conn, $_POST['project_name'], $_POST['proj_id']);
+        success_message('Proejct ' . $_POST['project_name'] . '
+            updated successfully');
+    } else {
+        error_message("Couldn't update project name to nothing");
+    }
+
+}
+
+# Assign employee to a project by fullname
+if ($_POST['assign_by_fullname']) {
+    try {
+        $emp_id = ShowHelper::get_emp_id_by_fullname($conn, $_POST['firstname'], $_POST['lastname']);
+        EditHelper::assign_emp_to_proj($conn, $emp_id, $_POST['proj_id']);
+        echo '<h4 class="text-center mt-3 display-5">Employee ' . $_POST['firstname'] . " " .
+            $_POST['lastname'] . ' assigned to ' . $_POST['project_name'] . ' successfully
+             </h4>';
+    } catch (Throwable $e) {
+        error_message("Employee by this name and lastname doesn't exist");
+    }
+}
+# Assign employee to a project by id
+// if ($_POST['assign_by_id']) {
+//     $proj_id = $_POST['proj_id'];
+//     $emp_id = $_POST['emp_id'];
+//     EditHelper::assign_emp_to_proj($conn, $emp_id, $proj_id);
+//     echo '<h4 class="text-center mt-3 display-5">Employee with id ' . $_POST['emp_id'] .
+//         ' assigned to ' . $_POST['project_name'] . ' successfully
+//          </h4>';
+// }
+
+// Display by id
+
+if ($_POST['search_by_id']) {
+    try {
         $proj_id = $_POST['search_by_id'];
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $stmt = ShowHelper::show_proj_by_id($conn, $proj_id);
+    } catch (Throwable $e) {
+        error_message("No project by this id");
     }
-    // Display by project name
+}
+// Display by project name
 
-    elseif ($_POST['search_by_name']) {
+elseif ($_POST['search_by_name']) {
+    try {
         $proj_name = $_POST['search_by_name'];
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $stmt = ShowHelper::show_proj_by_name($conn, $proj_name);
+    } catch (Throwable $e) {
+        error_message("No project by this name");
     }
-    // Showing all by default
-    else {
+}
+// Showing all by default
+else {
+    try {
         $stmt = ShowHelper::show_all_projs($conn, $min, $max);
+    } catch (Throwable $e) {
+        error_message("Couldn't retrieve data");
     }
-    $projects = [];
-
+}
+$projects = [];
+if ($stmt) {
     foreach (new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
         $fullname = $v['firstname'] . " " . $v['lastname'];
 
@@ -140,10 +175,9 @@ try {
             $projects += [$v['id'] => $p];
         }
     }
-} catch (PDOException $e) {
-    echo 'Error: ' . $e->getMessage();
 }
 $conn = null;
+
 if ($projects) {
     echo '<div class="container mt-5 mb-5">
     <table class="table table-bordered table-hover">

@@ -6,9 +6,9 @@ class ShowHelper
     public static function get_min_id_per_page(PDO $conn, int $res, int $offs, string $table)
     {
         $id_values = [];
-        $min_max = "SELECT id FROM $table
+        $que = "SELECT id FROM $table
             LIMIT $res OFFSET $offs;";
-        $stmt = $conn->prepare($min_max);
+        $stmt = $conn->prepare($que);
         $res = $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         foreach (new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
@@ -146,6 +146,24 @@ class ShowHelper
         }
         return $emp_id;
     }
+
+    public static function get_proj_id_by_name(PDO $conn, string $name) {
+       $que = "SELECT id as proj_id
+       FROM projects
+       WHERE project_name='$name'";
+        $stmt = $conn->prepare($que);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        foreach(new RecursiveArrayIterator($stmt->fetchAll()) as $k => $v) {
+            $proj_id = $v['proj_id'];
+        }
+
+
+        return $proj_id;
+
+    }
+
+
     public static function show_all_emps_in_proj(PDO $conn, $id)
     {
         $que = "SELECT employees.id, firstname, lastname

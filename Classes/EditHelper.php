@@ -22,13 +22,23 @@ class EditHelper
         $que = "INSERT INTO employees_projects
         (employee_id, project_id)
         VALUES ($emp_id, $proj_id)";
-        $conn->exec($que);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $stmt = $conn->prepare($que);
+        $stmt->execute();
+        // $conn->exec($que);
     }
     public static function unassign_emp_from_proj(PDO $conn, int $emp_id, int $proj_id): void
     {
         $que = "DELETE FROM employees_projects
         WHERE employee_id = $emp_id
         AND project_id = $proj_id";
+        $conn->exec($que);
+    }
+    public static function assign_proj_to_emp(PDO $conn, int $emp_id, int $proj_id) : void {
+        $que = "INSERT INTO employees_projects
+        (employee_id, project_id)
+        VALUES ($emp_id, $proj_id)";
+
         $conn->exec($que);
     }
 
