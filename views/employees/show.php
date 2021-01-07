@@ -76,13 +76,19 @@ if (isset($_POST['delete'])) {
 
 # If confirmed deleting from DB
 if (isset($_POST['confirm_delete']) && isset($_POST['emp_id'])) {
+    try {
     DeleteHelper::delete_emp($conn, $_POST['emp_id']);
     success_message('Employee <span class="font-italic font-weight-light">
         ' . $_POST['fullname'] . '</span> deleted successfully');
+    }
+      catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
+    }
 }
 
 # Create
 if (isset($_POST['new'])) {
+    try {
     if ($_POST['firstname'] && $_POST['lastname']) {
         CreateHelper::create_emp($conn, $_POST['firstname'], $_POST['lastname']);
         success_message('<span class="font-italic font-weight-light">
@@ -91,17 +97,27 @@ if (isset($_POST['new'])) {
     } else {
         error_message("Employee must have first and lastname to be added");
     }
+}
+  catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
+    }
 
 }
 
 # Update
 if (isset($_POST['edit'])) {
+    try {
     EditHelper::edit_emp($conn, $_POST['firstname'], $_POST['lastname'], $_POST['emp_id']);
     echo '<h4 class="text-center mt-3 display-5">Employee
             <span class="font-italic font-weight-light">
             ' . $_POST['firstname'] . " " . $_POST['lastname'] . '
             </span>
             updated successfully</h4>';
+    }
+    catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
+    }
+
 }
 
 # Assign
@@ -111,15 +127,16 @@ if (isset($_POST['assign_emp_to_proj'])) {
         EditHelper::assign_proj_to_emp($conn, $_POST['emp_id'], $proj_id);
         success_message('Employee '.$_POST['fullname'].' was assigned to '.$_POST['project_name'].'
         successfully');
-    } catch (Throwable $e) {
+    }
+      catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
+    }
+    catch (Throwable $e) {
         error_message("Project by this name doesn't
         exist or employee already assigned to this project");
     }
 
 }
-
-$OFFSET = $_SESSION['employees_offset'];
-//Getting min and max values in the current OFFSET to know which id's to display
 
 // Displaying accordingly if search by id
 if ($_POST['search_by_id']) {
@@ -127,7 +144,8 @@ if ($_POST['search_by_id']) {
         $emp_id = $_POST['search_by_id'];
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $stmt = ShowHelper::show_emp_by_id($conn, $emp_id);
-    } catch (Throwable $e) {
+    }
+    catch (Throwable $e) {
         error_message("No employee by this id");
     }
 }
@@ -137,7 +155,9 @@ elseif ($_POST['search_by_lastname']) {
         $lastname = $_POST['search_by_lastname'];
         $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $stmt = ShowHelper::show_emp_by_lastname($conn, $lastname);
-    } catch (Throwable $e) {
+    }
+
+    catch (Throwable $e) {
         error_message("No employee by this lastname");
     }
 }
@@ -145,7 +165,9 @@ elseif ($_POST['search_by_lastname']) {
 else {
     try {
         $stmt = ShowHelper::show_all_emps($conn, $min, $max);
-    } catch (Throwable $e) {
+    }
+
+catch (Throwable $e) {
         error_message("Couldn't retrieve data");
     }
 }

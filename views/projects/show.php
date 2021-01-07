@@ -79,13 +79,19 @@ if ($_POST['delete']) {
 # If confirmed deleting from DB
 
 if (isset($_POST['confirm_delete']) && isset($_POST['proj_id'])) {
+    try {
     DeleteHelper::delete_proj($conn, $_POST['proj_id']);
     echo '<h4 class="text-center mt-3 display-5">Proejct
             <span class="font-italic font-weight-light">"' . $_POST['project_name'] . '"</span>
             deleted successfully</h4>';
+    }
+      catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
+    }
 }
 
 if (isset($_POST['new'])) {
+    try {
     if ($_POST['project_name']) {
         CreateHelper::create_proj($conn, $_POST['project_name']);
         echo success_message('Proejct <span class="font-italic font-weight-light">"
@@ -94,14 +100,23 @@ if (isset($_POST['new'])) {
         error_message("Project must have a name");
     }
 }
+  catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
+    }
+}
 
 if (isset($_POST['edit'])) {
+    try{
     if ($_POST['project_name']) {
         EditHelper::edit_proj_name($conn, $_POST['project_name'], $_POST['proj_id']);
         success_message('Proejct ' . $_POST['project_name'] . '
             updated successfully');
     } else {
         error_message("Couldn't update project name to nothing");
+    }
+}
+  catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
     }
 
 }
@@ -114,7 +129,11 @@ if ($_POST['assign_by_fullname']) {
         echo '<h4 class="text-center mt-3 display-5">Employee ' . $_POST['firstname'] . " " .
             $_POST['lastname'] . ' assigned to ' . $_POST['project_name'] . ' successfully
              </h4>';
-    } catch (Throwable $e) {
+    }
+      catch(PDOException $e) {
+        error_message("User unauthorized to do this command");
+    }
+    catch (Throwable $e) {
         error_message("Employee by this name and lastname doesn't exist");
     }
 }
