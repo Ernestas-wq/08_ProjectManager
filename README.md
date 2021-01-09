@@ -6,12 +6,14 @@ where you can perform basic CRUD operations and have a scaleable database.
 ## Instalation
 
 1. You will need AMPPS (_Make sure it's turned on before importing_)
-1. You will need some sort of a database managing application(__MySQL Workbench recommended__)
-1. Import __schema__ directoy into MySQL Workbench. In MySQL Workbench select __Server__ -> __Data Import__ -> Locate the __schema__ directory in projects __root__ directory -> __Start Import__.
-1. Execute the __users.php__ script via localhost to create the necessary users.(__NOTE:__ _Creating users this way is unsafe, this is purely for studying purposes. You can copy the query and add them by hand if you prefer._).
+1. You will need some sort of a database managing application(**MySQL Workbench recommended**)
+1. Clone or download and extract the project into your AMPPS projects folder(_By default it's Ampps/www/_).
+1. Import **schema** directoy into MySQL Workbench. In MySQL Workbench select **Server** -> **Data Import** -> Locate the **schema** directory in projects **root** directory -> **Start Import**.
+1. Execute the **users.php** script via localhost to create the necessary users.(**NOTE:** _Creating users this way is unsafe, this is purely for studying purposes. You can copy the query and add them by hand if you prefer._).
 
 ## Usage
-* Make sure AMPPS is turned on.
-* __(Keep in mind)__ If you ever want to refresh the data with a new set execute the __seeds.php__ script located in __root__/seeds/. You can also alter the _EMPS TO GENERATE_ and _CONNECTIONS TO GENERATE_ parameters to get more or less data.
-* You can find some test users in __users.json__ (_Note: the app user parameter will determine if you can only view the data or perform CRUD on it, so choose accordingly_).
-* Open the root directory via localhost, login and that's it!.
+
+- Make sure AMPPS is turned on.
+- **(Keep in mind)** If you ever want to refresh the data with a new set execute the **seeds.php** script located in **root**/seeds/. You can also alter the _EMPS TO GENERATE_ and _CONNECTIONS TO GENERATE_ parameters to get more or less data.
+- You can find some test users in **users.json** (_Note: the app user parameter will determine if you can only view the data or perform CRUD on it, so choose accordingly_).
+- Open the root directory via localhost, login and that's it!.
